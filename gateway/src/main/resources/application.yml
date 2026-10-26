@@ -1,0 +1,36 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      # CORS para que el Front-End (React) pueda llamar al Gateway.
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: [ GET, POST, PUT, DELETE, OPTIONS ]
+            allowedHeaders: "*"
+      routes:
+        - id: ms-buscador
+          # lb:// indica "usa el Load Balancer + Eureka", nada de IP ni puerto fijo.
+          uri: lb://ms-buscador
+          predicates:
+            - Path=/api/libros/**
+          filters:
+            - StripPrefix=1
+        - id: ms-operador
+          uri: lb://ms-operador
+          predicates:
+            - Path=/api/prestamos/**
+          filters:
+            - StripPrefix=1
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true

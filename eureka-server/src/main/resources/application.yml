@@ -1,0 +1,15 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: eureka-server
+
+eureka:
+  client:
+    # El propio servidor de registro no necesita registrarse en si mismo.
+    register-with-eureka: false
+    fetch-registry: false
+  server:
+    # En un entorno local, evitamos que Eureka expulse instancias por falsos positivos.
+    enable-self-preservation: false
