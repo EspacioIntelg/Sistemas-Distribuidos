@@ -6,6 +6,7 @@ import com.unir.buscador.repository.LibroRepository;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -68,11 +69,25 @@ public class LibroController {
     // ms-operador llama aquí para marcar un libro como prestado/devuelto.
     // Es la única fuente de verdad sobre disponibilidad.
     @PutMapping("/{id}/disponibilidad")
+    @Transactional
     public ResponseEntity<Libro> actualizarDisponibilidad(@PathVariable Long id,
                                                            @RequestBody DisponibilidadRequest request) {
+        if (!request.isDisponible()) {
+            if (libroRepository.reservarSiDisponible(id) == 1) {
+                return libroRepository.findById(id)
+                        .map(ResponseEntity::ok)
+                        .orElseGet(() -> ResponseEntity.notFound().build());
+            }
+
+            if (libroRepository.existsById(id)) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            }
+            return ResponseEntity.notFound().build();
+        }
+
         return libroRepository.findById(id)
                 .map(libro -> {
-                    libro.setDisponible(request.isDisponible());
+                    libro.setDisponible(true);
                     return ResponseEntity.ok(libroRepository.save(libro));
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());

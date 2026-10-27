@@ -5,8 +5,10 @@ import com.unir.operador.dto.LibroDto;
 import com.unir.operador.dto.NuevoPrestamoRequest;
 import com.unir.operador.model.Prestamo;
 import com.unir.operador.repository.PrestamoRepository;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
@@ -39,11 +41,20 @@ public class PrestamoService {
     }
 
     public Prestamo crear(NuevoPrestamoRequest request) {
+        if (request == null || request.getLibroId() == null) {
+            throw new IllegalArgumentException("El identificador del libro es obligatorio");
+        }
+        if (request.getUsuario() == null || request.getUsuario().isBlank()) {
+            throw new IllegalArgumentException("El nombre del usuario es obligatorio");
+        }
+
         LibroDto libro = obtenerLibro(request.getLibroId());
 
         if (!libro.isDisponible()) {
             throw new IllegalStateException("El libro ya esta prestado: " + request.getLibroId());
         }
+
+        actualizarDisponibilidad(libro.getId(), false);
 
         Prestamo prestamo = new Prestamo();
         prestamo.setLibroId(libro.getId());
@@ -52,24 +63,42 @@ public class PrestamoService {
         prestamo.setFechaPrestamo(LocalDate.now());
         prestamo.setEstado("ACTIVO");
 
-        Prestamo guardado = prestamoRepository.save(prestamo);
-        actualizarDisponibilidad(libro.getId(), false);
-        return guardado;
+        try {
+            return prestamoRepository.save(prestamo);
+        } catch (DataAccessException saveError) {
+            try {
+                actualizarDisponibilidad(libro.getId(), true);
+            } catch (RestClientException | IllegalStateException rollbackError) {
+                saveError.addSuppressed(rollbackError);
+            }
+            throw saveError;
+        }
     }
 
     public Prestamo devolver(Long id) {
         Prestamo prestamo = prestamoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Préstamo no encontrado: " + id));
 
+        if (!"ACTIVO".equals(prestamo.getEstado())) {
+            throw new IllegalStateException("El préstamo ya fue devuelto: " + id);
+        }
+
+        actualizarDisponibilidad(prestamo.getLibroId(), true);
         prestamo.setEstado("DEVUELTO");
         prestamo.setFechaDevolucion(LocalDate.now());
-        Prestamo guardado = prestamoRepository.save(prestamo);
 
-        actualizarDisponibilidad(guardado.getLibroId(), true);
-        return guardado;
+        try {
+            return prestamoRepository.save(prestamo);
+        } catch (DataAccessException saveError) {
+            try {
+                actualizarDisponibilidad(prestamo.getLibroId(), false);
+            } catch (RestClientException | IllegalStateException rollbackError) {
+                saveError.addSuppressed(rollbackError);
+            }
+            throw saveError;
+        }
     }
 
-    @SuppressWarnings("unused")
     private LibroDto obtenerLibro(Long libroId) {
         try {
             LibroDto libro = restTemplate.getForObject(URL_LIBRO, LibroDto.class, libroId);
@@ -83,6 +112,10 @@ public class PrestamoService {
     }
 
     private void actualizarDisponibilidad(Long libroId, boolean disponible) {
-        restTemplate.put(URL_DISPONIBILIDAD, new DisponibilidadRequest(disponible), libroId);
+        try {
+            restTemplate.put(URL_DISPONIBILIDAD, new DisponibilidadRequest(disponible), libroId);
+        } catch (HttpClientErrorException.Conflict ex) {
+            throw new IllegalStateException("El libro ya no esta disponible: " + libroId, ex);
+        }
     }
 }

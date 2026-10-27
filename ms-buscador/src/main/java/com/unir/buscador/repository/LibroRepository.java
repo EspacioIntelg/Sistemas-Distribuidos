@@ -2,6 +2,7 @@ package com.unir.buscador.repository;
 
 import com.unir.buscador.model.Libro;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -22,4 +23,8 @@ public interface LibroRepository extends JpaRepository<Libro, Long> {
             @Param("anio") Integer anio,
             @Param("disponible") Boolean disponible
     );
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("UPDATE Libro l SET l.disponible = false WHERE l.id = :id AND l.disponible = true")
+    int reservarSiDisponible(@Param("id") Long id);
 }
