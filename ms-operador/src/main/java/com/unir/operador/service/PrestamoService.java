@@ -1,6 +1,5 @@
 package com.unir.operador.service;
 
-import com.unir.operador.dto.DisponibilidadRequest;
 import com.unir.operador.dto.LibroDto;
 import com.unir.operador.dto.NuevoPrestamoRequest;
 import com.unir.operador.model.Prestamo;
@@ -9,7 +8,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,17 +17,12 @@ import java.util.Optional;
 @Service
 public class PrestamoService {
 
-    // "ms-buscador" es el nombre con el que ese microservicio se registra en Eureka.
-    // No usamos IP ni puerto: el LoadBalancer los resuelve a partir del registro.
-    private static final String URL_LIBRO = "http://ms-buscador/libros/{id}";
-    private static final String URL_DISPONIBILIDAD = "http://ms-buscador/libros/{id}/disponibilidad";
-
     private final PrestamoRepository prestamoRepository;
-    private final RestTemplate restTemplate;
+    private final CatalogoClient catalogoClient;
 
-    public PrestamoService(PrestamoRepository prestamoRepository, RestTemplate restTemplate) {
+    public PrestamoService(PrestamoRepository prestamoRepository, CatalogoClient catalogoClient) {
         this.prestamoRepository = prestamoRepository;
-        this.restTemplate = restTemplate;
+        this.catalogoClient = catalogoClient;
     }
 
     public List<Prestamo> listar() {
@@ -101,7 +94,7 @@ public class PrestamoService {
 
     private LibroDto obtenerLibro(Long libroId) {
         try {
-            LibroDto libro = restTemplate.getForObject(URL_LIBRO, LibroDto.class, libroId);
+            LibroDto libro = catalogoClient.obtenerLibro(libroId);
             if (libro == null) {
                 throw new NoSuchElementException("Libro no encontrado: " + libroId);
             }
@@ -113,7 +106,7 @@ public class PrestamoService {
 
     private void actualizarDisponibilidad(Long libroId, boolean disponible) {
         try {
-            restTemplate.put(URL_DISPONIBILIDAD, new DisponibilidadRequest(disponible), libroId);
+            catalogoClient.actualizarDisponibilidad(libroId, disponible);
         } catch (HttpClientErrorException.Conflict ex) {
             throw new IllegalStateException("El libro ya no esta disponible: " + libroId, ex);
         }

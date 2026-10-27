@@ -168,8 +168,8 @@ function App() {
     <div className="app-shell">
       <header className="topbar">
         <a className="brand" href="/" onClick={(event) => event.preventDefault()}>
-          <span className="brand-mark" aria-hidden="true">B</span>
-          <span>Biblioteca<span className="brand-light">Online</span></span>
+          <span className="brand-mark" aria-hidden="true">🎃</span>
+          <span>Biblioteca<span className="brand-light">Encantada</span></span>
         </a>
         <nav className="navigation" aria-label="Navegación principal">
           <button className={page === 'libros' ? 'nav-link active' : 'nav-link'} onClick={() => setPage('libros')}>
@@ -185,12 +185,12 @@ function App() {
       <main className="page-content">
         <section className="page-heading">
           <div>
-            <p className="eyebrow">LECTURA PARA TODOS</p>
-            <h1>{page === 'libros' ? 'Explora el catálogo' : 'Gestión de préstamos'}</h1>
+            <p className="eyebrow">EDICIÓN ESPECIAL DE HALLOWEEN</p>
+            <h1>{page === 'libros' ? 'Historias para noches oscuras' : 'Préstamos del más allá'}</h1>
             <p className="subtitle">
               {page === 'libros'
-                ? 'Encuentra tu próxima historia entre los libros disponibles.'
-                : 'Registra préstamos y mantén el estado de cada libro actualizado.'}
+                ? 'Encuentra una lectura escalofriante entre los libros disponibles.'
+                : 'Registra préstamos y devuelve cada libro antes de que den las doce.'}
             </p>
           </div>
           <div className="heading-stat">
@@ -198,6 +198,15 @@ function App() {
             <small>{page === 'libros' ? 'libros mostrados' : 'préstamos activos'}</small>
           </div>
         </section>
+
+        <aside className="halloween-banner" aria-label="Especial de Halloween">
+          <span className="halloween-icon" aria-hidden="true">🕯️</span>
+          <div>
+            <strong>La noche perfecta para una buena historia</strong>
+            <span>Explora el catálogo y deja que cada página te sorprenda.</span>
+          </div>
+          <span className="halloween-tag">NOCHE DE LECTURA</span>
+        </aside>
 
         {error && <div className="alert error-alert" role="alert">{error}</div>}
         {notice && <div className="alert success-alert" role="status">{notice}</div>}
@@ -354,7 +363,7 @@ function App() {
           </div>
         )}
       </main>
-      <footer className="footer">Biblioteca Online <span>·</span> Catálogo y préstamos</footer>
+      <footer className="footer">Biblioteca Encantada <span>·</span> Lecturas para noches de otoño</footer>
     </div>
   )
 }

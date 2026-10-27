@@ -807,3 +807,280 @@ textarea:focus {
     padding: 1rem;
   }
 }
+
+.app-shell {
+  color: #eee5d9;
+  background:
+    radial-gradient(ellipse at 82% 4%, rgb(91 48 32 / 22%), transparent 30rem),
+    #120f17;
+}
+
+.topbar {
+  border-color: #382b3a;
+  background: #1b1621;
+}
+
+.brand,
+.page-heading h1,
+.detail-card h2,
+.panel h2,
+.book-title,
+.loan-info strong,
+.empty-state strong {
+  color: #f5eadb;
+}
+
+.brand-mark {
+  border-radius: 11px;
+  background: #dc762b;
+  font-family: system-ui, sans-serif;
+  font-size: 1.15rem;
+}
+
+.brand-light,
+.subtitle,
+.heading-stat small,
+.book-author,
+.book-year,
+.detail-author,
+.synopsis,
+.panel-description,
+.form-hint,
+.loan-info span,
+.loan-dates,
+.footer {
+  color: #b7a9b5;
+}
+
+.nav-link {
+  color: #bdafbd;
+}
+
+.nav-link:hover,
+.nav-link.active,
+.add-book summary {
+  color: #f5a04f;
+}
+
+.nav-link.active::after {
+  background: #e98736;
+}
+
+.nav-count {
+  color: #ffd39f;
+  background: #493023;
+}
+
+.eyebrow,
+.heading-stat {
+  color: #f1a253;
+}
+
+.search-panel,
+.panel,
+.book-card,
+.detail-card,
+.detail-placeholder,
+.add-book {
+  border-color: #3a2e3e;
+  background: #211b27;
+  box-shadow: 0 10px 28px rgb(0 0 0 / 18%);
+}
+
+.book-card:hover,
+.book-card.selected {
+  border-color: #bd6c39;
+  box-shadow: 0 12px 28px rgb(0 0 0 / 28%);
+}
+
+.search-panel label,
+.stacked-form label {
+  color: #ddcfbf;
+}
+
+input,
+select,
+textarea {
+  border-color: #493b4c;
+  color: #f2e8dd;
+  background: #17131c;
+}
+
+input::placeholder {
+  color: #8f8290;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #dc843d;
+  box-shadow: 0 0 0 3px rgb(220 132 61 / 18%);
+}
+
+.button.primary {
+  color: #21140c;
+  background: #ed913e;
+}
+
+.button.primary:hover:not(:disabled) {
+  background: #f5a957;
+}
+
+.button.secondary {
+  border-color: #59455b;
+  color: #f0c99d;
+  background: #2a2230;
+}
+
+.button.secondary:hover:not(:disabled) {
+  border-color: #a46a47;
+  background: #382832;
+}
+
+.book-cover {
+  color: #fff0d9;
+  background: linear-gradient(145deg, #a54f27, #522943);
+  box-shadow: inset 4px 0 rgb(0 0 0 / 22%);
+}
+
+.book-card:nth-child(4n + 2) .book-cover { background: linear-gradient(145deg, #76402c, #382a48); }
+.book-card:nth-child(4n + 3) .book-cover { background: linear-gradient(145deg, #48514b, #292b3d); }
+.book-card:nth-child(4n + 4) .book-cover { background: linear-gradient(145deg, #92713a, #493044); }
+
+.availability {
+  color: #9bd19e;
+}
+
+.availability.unavailable {
+  color: #f0a064;
+}
+
+.icon-button {
+  color: #dfc9b5;
+  background: #342a39;
+}
+
+.book-metadata {
+  border-color: #3b303e;
+}
+
+.book-metadata dt,
+.book-metadata dd {
+  color: #c1b2c0;
+}
+
+.placeholder-icon {
+  color: #f1a253;
+}
+
+.detail-placeholder {
+  color: #bdafbd;
+}
+
+.detail-placeholder strong {
+  color: #f5eadb;
+}
+
+.loan-icon {
+  color: #f5b066;
+  background: #3b2a2a;
+}
+
+.loan-list {
+  border-color: #3b303e;
+}
+
+.loan-row {
+  border-color: #3b303e;
+}
+
+.status-active {
+  color: #a8d7a7;
+  background: #283b31;
+}
+
+.status-returned {
+  color: #c4b8c5;
+  background: #342d39;
+}
+
+.empty-state {
+  border-color: #4a3b4e;
+  color: #bdafbd;
+  background: rgb(33 27 39 / 65%);
+}
+
+.empty-state strong {
+  color: #f5eadb;
+}
+
+.error-alert {
+  border-color: #754039;
+  color: #ffc0ad;
+  background: #382322;
+}
+
+.success-alert {
+  border-color: #3d654b;
+  color: #b9e2bb;
+  background: #22352b;
+}
+
+.footer {
+  border-color: #382b3a;
+  background: #1b1621;
+}
+
+.footer span {
+  color: #725e70;
+}
+
+.halloween-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: -0.5rem 0 1.5rem;
+  padding: 1rem 1.2rem;
+  border: 1px solid #69412f;
+  border-radius: 12px;
+  background: linear-gradient(100deg, #38231f, #28202d 70%);
+}
+
+.halloween-icon {
+  font-size: 1.8rem;
+}
+
+.halloween-banner div {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.halloween-banner strong {
+  color: #ffe3c3;
+  font-size: 0.87rem;
+}
+
+.halloween-banner div span {
+  color: #cbb9b0;
+  font-size: 0.76rem;
+}
+
+.halloween-tag {
+  color: #f4ad65;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 520px) {
+  .halloween-banner {
+    align-items: flex-start;
+    padding: 0.9rem;
+  }
+
+  .halloween-tag {
+    display: none;
+  }
+}
