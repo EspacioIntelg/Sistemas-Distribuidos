@@ -19,6 +19,6 @@ textarea {
 button:focus-visible,
 a:focus-visible,
 summary:focus-visible {
-  outline: 3px solid #82aa8c;
+  outline: 3px solid #f1a253;
   outline-offset: 3px;
 }

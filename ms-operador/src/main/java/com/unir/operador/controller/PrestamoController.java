@@ -2,6 +2,7 @@ package com.unir.operador.controller;
 
 import com.unir.operador.dto.NuevoPrestamoRequest;
 import com.unir.operador.model.Prestamo;
+import com.unir.operador.service.CatalogoNoDisponibleException;
 import com.unir.operador.service.PrestamoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,6 +50,8 @@ public class PrestamoController {
             return ResponseEntity.badRequest().body(ex.getMessage());
         } catch (IllegalStateException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+        } catch (CatalogoNoDisponibleException ex) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(ex.getMessage());
         }
     }
 
@@ -60,6 +63,8 @@ public class PrestamoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         } catch (IllegalStateException ex) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+        } catch (CatalogoNoDisponibleException ex) {
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(ex.getMessage());
         }
     }
 }
