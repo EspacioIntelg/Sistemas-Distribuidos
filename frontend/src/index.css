@@ -5,6 +5,20 @@
 body {
   margin: 0;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  background-color: #f9fafb;
+  background-color: #f7f8f5;
   color: #111827;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+summary:focus-visible {
+  outline: 3px solid #82aa8c;
+  outline-offset: 3px;
 }
